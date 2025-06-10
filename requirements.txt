@@ -1,13 +1,28 @@
-# Central Audit - Sistema Web
-# Dependências necessárias para funcionamento completo
+# UPAUDIT - Sistema de Auditoria Web
+# Dependências otimizadas para produção
 
 # Framework Web
 Flask==2.3.3
 Flask-SocketIO==5.3.6
 
+# WebSocket
+python-socketio==5.9.0
+python-engineio==4.7.1
+eventlet==0.33.3
+
+# Servidor Web
+gunicorn==21.2.0
+
 # Automação Web
 selenium==4.15.2
 webdriver-manager==4.0.1
+
+# Requisições HTTP
+requests==2.31.0
+
+# Utilitários
+python-dotenv==1.0.0
+psutil==5.9.6
 
 # Interface Gráfica (mantida para compatibilidade)
 PySimpleGUI>=4.60.5
@@ -15,12 +30,6 @@ PySimpleGUI>=4.60.5
 # Manipulação de Dados
 pandas>=2.0.0
 openpyxl>=3.1.0
-
-# Requisições HTTP
-requests==2.31.0
-
-# Manipulação de JSON (já incluído no Python)
-# json - biblioteca padrão
 
 # Data e Hora (já incluído no Python)
 # datetime - biblioteca padrão
@@ -41,9 +50,4 @@ requests==2.31.0
 # pathlib - biblioteca padrão
 
 # Novas dependências adicionadas
-python-socketio==5.9.0
-python-engineio==4.7.1
-Pillow==10.0.1
-python-dotenv==1.0.0
-gunicorn==21.2.0
-eventlet==0.33.3 
+Pillow==10.0.1 

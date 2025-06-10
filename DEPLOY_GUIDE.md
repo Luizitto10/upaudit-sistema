@@ -51,7 +51,7 @@ No painel do Railway, adicione:
 ```
 FLASK_ENV=production
 FLASK_DEBUG=False
-SECRET_KEY=sua_chave_super_secreta_aqui
+SECRET_KEY=9225e5fe046b4e9eb11f276f751c9ed8072a34f0371f3deff0137ff6f4889174
 SELENIUM_HEADLESS=True
 ```
 

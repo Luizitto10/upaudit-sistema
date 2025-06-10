@@ -4,6 +4,13 @@ import json
 import os
 import threading
 import time
+
+# Configurações para produção
+if os.environ.get('FLASK_ENV') == 'production':
+    # Configurações específicas para Railway/Render
+    os.environ['DISPLAY'] = ':99'
+    os.environ['CHROME_BIN'] = '/usr/bin/chromium'
+    os.environ['CHROMEDRIVER_PATH'] = '/usr/bin/chromedriver'
 from datetime import datetime, timedelta
 from central_audit import (
     gerar_prints, enviar_whatsapp, get_empresas_ativas, 
