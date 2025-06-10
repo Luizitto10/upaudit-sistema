@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Configurações - Sistema de Auditoria{% endblock %}
+{% block content %}
+<h1><i class="fas fa-cog me-3"></i>Configurações do Sistema</h1>
+<div class="card">
+    <div class="card-header">
+        <h5>Configurações Atuais</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6>Sistema de Auditoria</h6>
+                <p><strong>URL:</strong> {{ config.audit_system.url if config.audit_system else 'Não configurado' }}</p>
+                <p><strong>Login:</strong> {{ config.audit_system.login if config.audit_system else 'Não configurado' }}</p>
+            </div>
+            <div class="col-md-6">
+                <h6>Chrome</h6>
+                <p><strong>Modo Invisível:</strong> {{ 'Sim' if config.chrome.headless else 'Não' if config.chrome else 'Não configurado' }}</p>
+                <p><strong>Timeout:</strong> {{ config.chrome.timeout if config.chrome else 'Não configurado' }}s</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,146 @@
+[
+    {
+        "grupo": "UPAUDIT + EQUILIBRIO",
+        "arquivo": "16289 - Equilibrio Homeopatia.png",
+        "empresa": "Equilibrio Homeopatia",
+        "ativo": true
+    },
+    {
+        "grupo": "GUIMA",
+        "arquivo": "26412 - Guimaraes 85.png",
+        "ativo": true,
+        "empresa": "Guimaraes 85"
+    },
+    {
+        "grupo": "GUIMA",
+        "arquivo": "26413 - Guimaraes 63.png",
+        "ativo": true,
+        "empresa": "Guimaraes 63"
+    },
+    {
+        "grupo": "Materca",
+        "arquivo": "27119 - Matercaldas.png",
+        "ativo": true,
+        "empresa": "Matercaldas"
+    },
+    {
+        "grupo": "Serra dos Pirineus",
+        "arquivo": "7520 - Auto Posto Serra dos Pirineus.png",
+        "ativo": true,
+        "empresa": "Auto Posto Serra dos Pirineus"
+    },
+    {
+        "grupo": "Mineira Mat",
+        "arquivo": "27138 - Mineira Materiais.png",
+        "ativo": true,
+        "empresa": "Mineira Materiais"
+    },
+    {
+        "grupo": "CANTINHO FRIO",
+        "arquivo": "15944 - CANTINHO FRIO.png",
+        "ativo": true,
+        "empresa": "Cantinho Frio"
+    },
+    {
+        "grupo": "UP + CASA DIBS",
+        "arquivo": "25715 - Casa Dibs.png",
+        "empresa": "Casa Dibs",
+        "ativo": true
+    },
+    {
+        "grupo": "Chao Nativo",
+        "arquivo": "26520 - Chao Nativo.png",
+        "ativo": true,
+        "empresa": "Chao Nativo"
+    },
+    {
+        "grupo": "CONVENIENCIA",
+        "arquivo": "23980 - MERCEARIA E CONVENIENCIA DOS GAUCHOS.png",
+        "ativo": true,
+        "empresa": "Mercearia e Conveniencia dos Gauchos"
+    },
+    {
+        "grupo": "Farmacia Essencial",
+        "arquivo": "17609 - Farmacia Essencial - 176.png",
+        "ativo": false,
+        "empresa": "Farmacia Essencial - 176"
+    },
+    {
+        "grupo": "Farmacia Essencial",
+        "arquivo": "23703 - Farmacia Essencial - 257.png",
+        "ativo": false,
+        "empresa": "Farmacia Essencial - 257"
+    },
+    {
+        "grupo": "Madeimanas",
+        "arquivo": "26306 - Madeimanas Madeireira 60.png",
+        "ativo": false,
+        "empresa": "Madeimanas Madeireira 60"
+    },
+    {
+        "grupo": "Madeimanas",
+        "arquivo": "26305 - Madeimanas Madeireira 80.png",
+        "ativo": false,
+        "empresa": "Madeimanas Madeireira 80"
+    },
+    {
+        "grupo": "Oliveira Casa",
+        "arquivo": "26304 - Oliveira Casa e Construção.png",
+        "ativo": true,
+        "empresa": "Oliveira Casa e Construção"
+    },
+    {
+        "grupo": "Serra City",
+        "arquivo": "25716 - Posto Serra City.png",
+        "ativo": true,
+        "empresa": "Posto Serra City"
+    },
+    {
+        "grupo": "San Francesco",
+        "arquivo": "23025 - Clinica San Francesco.png",
+        "ativo": true,
+        "empresa": "Clinica San Francesco"
+    },
+    {
+        "grupo": "Posto 8",
+        "arquivo": "7517 - Posto Aderup.png",
+        "ativo": true,
+        "empresa": "Posto Aderup"
+    },
+    {
+        "grupo": "Supermercado Feliz",
+        "arquivo": "16096 - Supermercado Feliz.png",
+        "ativo": true,
+        "empresa": "Supermercado Feliz"
+    },
+    {
+        "grupo": "Posto Primavera",
+        "arquivo": "16660 - Posto Primavera 000170.png",
+        "ativo": false,
+        "empresa": "Posto Primavera 000170"
+    },
+    {
+        "grupo": "Petro Bessa",
+        "arquivo": "16791 - Posto Petro Bessa.png",
+        "ativo": true,
+        "empresa": "Posto Petro Bessa"
+    },
+    {
+        "grupo": "Drogaria Legitima",
+        "arquivo": "25488 - Drogaria Legitima - 00.png",
+        "ativo": true,
+        "empresa": "Drogaria Legitima - 00"
+    },
+    {
+        "grupo": "Drogaria Legitima",
+        "arquivo": "25489 - Drogaria Legitima - 83.png",
+        "ativo": true,
+        "empresa": "Drogaria Legitima - 83"
+    },
+    {
+        "grupo": "Drogaria Legitima",
+        "arquivo": "25490 - Drogaria Legitima - 46.png",
+        "ativo": true,
+        "empresa": "Drogaria Legitima - 46"
+    }
+]

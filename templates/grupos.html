@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+{% block title %}Grupos WhatsApp - Sistema de Auditoria{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fab fa-whatsapp me-3"></i>Grupos WhatsApp</h1>
+    <div>
+        <span class="badge bg-info me-2" id="totalGrupos">Total: 0</span>
+        <span class="badge bg-success me-2" id="gruposAtivos">Ativos: 0</span>
+        <span class="badge bg-secondary me-2" id="gruposInativos">Inativos: 0</span>
+        <button class="btn btn-success ms-2" onclick="abrirModalNovoGrupo()">
+            <i class="fas fa-plus me-2"></i>Novo Grupo
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fab fa-whatsapp me-2"></i>Lista de Grupos WhatsApp</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="gruposTable">
+                <thead>
+                    <tr>
+                        <th><i class="fab fa-whatsapp me-1"></i>Grupo WhatsApp</th>
+                        <th><i class="fas fa-building me-1"></i>Empresa</th>
+                        <th><i class="fas fa-file-image me-1"></i>Arquivo Print</th>
+                        <th><i class="fas fa-toggle-on me-1"></i>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="gruposTableBody">
+                    <!-- Dados carregados via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center py-5 d-none" id="gruposVazio">
+            <i class="fab fa-whatsapp fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">Nenhum grupo WhatsApp encontrado</h5>
+            <p class="text-muted">Clique em "Novo Grupo" para adicionar o primeiro grupo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Resumo por Grupo -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie me-2"></i>Resumo por Grupo</h5>
+            </div>
+            <div class="card-body" id="resumoGrupos">
+                <!-- Carregado via JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Novo/Editar Grupo -->
+<div class="modal fade" id="grupoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="grupoModalTitle">
+                    <i class="fab fa-whatsapp me-2"></i>Novo Grupo WhatsApp
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="grupoForm">
+                    <div class="mb-3">
+                        <label for="grupoNome" class="form-label">Nome do Grupo WhatsApp *</label>
+                        <input type="text" class="form-control" id="grupoNome" required>
+                        <small class="text-muted">Nome exato do grupo no WhatsApp</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="grupoEmpresa" class="form-label">Nome da Empresa *</label>
+                        <input type="text" class="form-control" id="grupoEmpresa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="grupoArquivo" class="form-label">Arquivo do Print *</label>
+                        <input type="text" class="form-control" id="grupoArquivo" required>
+                        <small class="text-muted">Ex: 27119 - Matercaldas.png</small>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="grupoAtivo" checked>
+                            <label class="form-check-label" for="grupoAtivo">
+                                Grupo Ativo
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarGrupo()">
+                    <i class="fas fa-save me-2"></i>Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmação Exclusão -->
+<div class="modal fade" id="confirmarExclusaoGrupoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o grupo <strong id="grupoExcluirNome"></strong>?</p>
+                <p class="text-muted">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="confirmarExclusaoGrupo()">
+                    <i class="fas fa-trash me-2"></i>Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let grupos = [];
+let grupoEditandoIndex = -1;
+let grupoExcluindoIndex = -1;
+
+// Carrega grupos ao inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    carregarGrupos();
+});
+
+function carregarGrupos() {
+    fetch('/api/grupos')
+        .then(response => response.json())
+        .then(data => {
+            grupos = data;
+            renderizarTabelaGrupos();
+            atualizarEstatisticas();
+            renderizarResumoGrupos();
+        })
+        .catch(error => {
+            console.error('Erro ao carregar grupos:', error);
+            alert('Erro ao carregar grupos');
+        });
+}
+
+function renderizarTabelaGrupos() {
+    const tbody = document.getElementById('gruposTableBody');
+    const gruposVazio = document.getElementById('gruposVazio');
+    const gruposTable = document.getElementById('gruposTable');
+    
+    tbody.innerHTML = '';
+    
+    if (grupos.length === 0) {
+        gruposTable.style.display = 'none';
+        gruposVazio.classList.remove('d-none');
+        return;
+    }
+    
+    gruposTable.style.display = 'table';
+    gruposVazio.classList.add('d-none');
+    
+    grupos.forEach((grupo, index) => {
+        const row = document.createElement('tr');
+        row.className = grupo.ativo ? '' : 'table-secondary';
+        row.innerHTML = `
+            <td>
+                <strong class="text-primary">${grupo.grupo}</strong>
+            </td>
+            <td>${grupo.empresa}</td>
+            <td>
+                <small class="text-muted">${grupo.arquivo}</small>
+            </td>
+            <td>
+                ${grupo.ativo ? 
+                    '<span class="badge bg-success"><i class="fas fa-check me-1"></i>Ativo</span>' : 
+                    '<span class="badge bg-secondary"><i class="fas fa-pause me-1"></i>Inativo</span>'
+                }
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" onclick="editarGrupo(${index})" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="excluirGrupo(${index}, '${grupo.grupo}')" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function atualizarEstatisticas() {
+    const total = grupos.length;
+    const ativos = grupos.filter(g => g.ativo).length;
+    const inativos = total - ativos;
+    
+    document.getElementById('totalGrupos').textContent = `Total: ${total}`;
+    document.getElementById('gruposAtivos').textContent = `Ativos: ${ativos}`;
+    document.getElementById('gruposInativos').textContent = `Inativos: ${inativos}`;
+}
+
+function renderizarResumoGrupos() {
+    const resumoContainer = document.getElementById('resumoGrupos');
+    
+    // Agrupa por nome do grupo
+    const gruposAgrupados = {};
+    grupos.forEach(grupo => {
+        if (!gruposAgrupados[grupo.grupo]) {
+            gruposAgrupados[grupo.grupo] = [];
+        }
+        gruposAgrupados[grupo.grupo].push(grupo);
+    });
+    
+    if (Object.keys(gruposAgrupados).length === 0) {
+        resumoContainer.innerHTML = '<p class="text-muted text-center">Nenhum grupo para exibir</p>';
+        return;
+    }
+    
+    let html = '<div class="row">';
+    Object.entries(gruposAgrupados).forEach(([nomeGrupo, empresasGrupo]) => {
+        html += `
+            <div class="col-md-4 mb-3">
+                <div class="card border-primary">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">
+                            <i class="fab fa-whatsapp me-1"></i>${nomeGrupo}
+                        </h6>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                ${empresasGrupo.length} empresa(s)
+                            </small>
+                        </p>
+                        <div>
+                            ${empresasGrupo.map(empresa => 
+                                `<span class="badge ${empresa.ativo ? 'bg-success' : 'bg-secondary'} me-1 mb-1">
+                                    ${empresa.empresa}
+                                </span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    resumoContainer.innerHTML = html;
+}
+
+function abrirModalNovoGrupo() {
+    grupoEditandoIndex = -1;
+    document.getElementById('grupoModalTitle').innerHTML = '<i class="fab fa-whatsapp me-2"></i>Novo Grupo WhatsApp';
+    document.getElementById('grupoForm').reset();
+    document.getElementById('grupoAtivo').checked = true;
+    new bootstrap.Modal(document.getElementById('grupoModal')).show();
+}
+
+function editarGrupo(index) {
+    grupoEditandoIndex = index;
+    const grupo = grupos[index];
+    
+    document.getElementById('grupoModalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Editar Grupo WhatsApp';
+    document.getElementById('grupoNome').value = grupo.grupo;
+    document.getElementById('grupoEmpresa').value = grupo.empresa;
+    document.getElementById('grupoArquivo').value = grupo.arquivo;
+    document.getElementById('grupoAtivo').checked = grupo.ativo;
+    
+    new bootstrap.Modal(document.getElementById('grupoModal')).show();
+}
+
+function salvarGrupo() {
+    const nome = document.getElementById('grupoNome').value;
+    const empresa = document.getElementById('grupoEmpresa').value;
+    const arquivo = document.getElementById('grupoArquivo').value;
+    const ativo = document.getElementById('grupoAtivo').checked;
+    
+    if (!nome || !empresa || !arquivo) {
+        alert('Preencha todos os campos obrigatórios');
+        return;
+    }
+    
+    const grupoData = {
+        grupo: nome,
+        empresa: empresa,
+        arquivo: arquivo,
+        ativo: ativo
+    };
+    
+    if (grupoEditandoIndex >= 0) {
+        // Editando grupo existente
+        fetch(`/api/grupos/${grupoEditandoIndex}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(grupoData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('grupoModal')).hide();
+                carregarGrupos();
+                alert('Grupo atualizado com sucesso!');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao salvar grupo');
+        });
+    } else {
+        // Novo grupo
+        fetch('/api/grupos', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(grupoData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('grupoModal')).hide();
+                carregarGrupos();
+                alert('Grupo criado com sucesso!');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao criar grupo');
+        });
+    }
+}
+
+function excluirGrupo(index, nome) {
+    grupoExcluindoIndex = index;
+    document.getElementById('grupoExcluirNome').textContent = nome;
+    new bootstrap.Modal(document.getElementById('confirmarExclusaoGrupoModal')).show();
+}
+
+function confirmarExclusaoGrupo() {
+    fetch(`/api/grupos/${grupoExcluindoIndex}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('confirmarExclusaoGrupoModal')).hide();
+            carregarGrupos();
+            alert('Grupo excluído com sucesso!');
+        } else {
+            alert('Erro: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao excluir grupo');
+    });
+}
+</script>
+{% endblock %} 

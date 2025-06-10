@@ -1,0 +1,74 @@
+# Arquivos Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ambientes virtuais
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Arquivos de configuração sensíveis
+.env
+*.env
+config.ini
+secrets.json
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Selenium
+chromedriver*
+geckodriver*
+*.exe
+
+# Prints gerados (opcional - descomente se não quiser subir)
+# prints/
+# *.png
+# *.jpg
+# *.jpeg
+
+# Arquivos de backup
+*.bak
+*.backup
+
+# Arquivos específicos do Windows
+*.lnk 

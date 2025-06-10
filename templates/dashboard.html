@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - UPAUDIT{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1><i class="fas fa-tachometer-alt me-3"></i>Dashboard</h1>
+        <p class="text-muted mb-0">Painel de controle do sistema de auditoria</p>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center">
+            <span class="status-indicator online me-2"></span>
+            <span class="text-muted">Sistema Online</span>
+        </div>
+        <button class="btn btn-success me-2" onclick="executarCompleto()">
+            <i class="fas fa-rocket me-2"></i>Executar Completo
+        </button>
+        <button class="btn btn-primary" onclick="atualizarDados()">
+            <i class="fas fa-sync me-2"></i>Atualizar
+        </button>
+    </div>
+</div>
+
+<!-- Estatísticas Principais -->
+<div class="row mb-5">
+    <div class="col-md-3">
+        <div class="stat-card success">
+            <div class="stats-icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <h3 class="mb-1 text-success fw-bold">{{ stats.empresas_ativas }}</h3>
+            <p class="mb-0 text-muted">Empresas Ativas</p>
+            <small class="text-success">
+                <i class="fas fa-arrow-up me-1"></i>Operacionais
+            </small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card info">
+            <div class="stats-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h3 class="mb-1 text-info fw-bold">{{ stats.total_grupos }}</h3>
+            <p class="mb-0 text-muted">Grupos WhatsApp</p>
+            <small class="text-info">
+                <i class="fas fa-comments me-1"></i>Configurados
+            </small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card warning">
+            <div class="stats-icon">
+                <i class="fas fa-pause-circle"></i>
+            </div>
+            <h3 class="mb-1 text-warning fw-bold">{{ stats.empresas_inativas }}</h3>
+            <p class="mb-0 text-muted">Empresas Inativas</p>
+            <small class="text-warning">
+                <i class="fas fa-clock me-1"></i>Pausadas
+            </small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stats-icon">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3 class="mb-1 text-primary fw-bold">{{ stats.total_empresas }}</h3>
+            <p class="mb-0 text-muted">Total de Empresas</p>
+            <small class="text-primary">
+                <i class="fas fa-database me-1"></i>Cadastradas
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Controles Rápidos -->
+<div class="row mb-5">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-camera me-2 text-primary"></i>Gerar Prints</h5>
+            </div>
+            <div class="card-body text-center d-flex flex-column">
+                <div class="mb-3">
+                    <i class="fas fa-camera fa-3x text-primary mb-3"></i>
+                    <p class="text-muted">Captura screenshots automáticos de todas as empresas ativas no sistema</p>
+                </div>
+                <button class="btn btn-primary w-100 mt-auto" onclick="gerarPrints()">
+                    <i class="fas fa-play me-2"></i>Iniciar Geração
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fab fa-whatsapp me-2 text-success"></i>Enviar WhatsApp</h5>
+            </div>
+            <div class="card-body text-center d-flex flex-column">
+                <div class="mb-3">
+                    <i class="fab fa-whatsapp fa-3x text-success mb-3"></i>
+                    <p class="text-muted">Envia os prints gerados para os grupos configurados no WhatsApp</p>
+                </div>
+                <button class="btn btn-success w-100 mt-auto" onclick="enviarWhatsApp()">
+                    <i class="fas fa-paper-plane me-2"></i>Enviar Mensagens
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-rocket me-2 text-warning"></i>Processo Completo</h5>
+            </div>
+            <div class="card-body text-center d-flex flex-column">
+                <div class="mb-3">
+                    <i class="fas fa-rocket fa-3x text-warning mb-3"></i>
+                    <p class="text-muted">Executa todo o processo: gera prints e envia automaticamente para WhatsApp</p>
+                </div>
+                <button class="btn btn-warning w-100 mt-auto" onclick="executarCompleto()">
+                    <i class="fas fa-magic me-2"></i>Executar Tudo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Status do Sistema -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-terminal me-2 text-success"></i>Logs do Sistema</h5>
+            </div>
+            <div class="card-body">
+                <div class="log-container" id="logContainer">
+                    <div class="text-center text-muted py-3">
+                        <i class="fas fa-code fa-2x mb-2"></i>
+                        <p>Sistema pronto para uso...</p>
+                        <small>Os logs aparecerão aqui durante a execução</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2 text-info"></i>Status do Sistema</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="text-muted">Status:</strong>
+                        <span class="badge bg-success" id="systemStatus">
+                            <i class="fas fa-check me-1"></i>Online
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="text-muted">Progresso:</strong>
+                        <span class="text-muted" id="progressText">0%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <strong class="text-muted">Última Atualização:</strong>
+                    <br><small class="text-muted" id="lastUpdate">{{ stats.ultima_atualizacao }}</small>
+                </div>
+                
+                <div class="mb-3">
+                    <strong class="text-muted">Processo Atual:</strong>
+                    <br><small class="text-muted" id="currentProcess">Aguardando...</small>
+                </div>
+                
+                <button class="btn btn-danger w-100" onclick="pararProcesso()" id="stopBtn" style="display: none;">
+                    <i class="fas fa-stop me-2"></i>Parar Processo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let processRunning = false;
+
+// Funções principais
+function gerarPrints() {
+    if (processRunning) {
+        alert('Já existe um processo em execução!');
+        return;
+    }
+    
+    if (confirm('Deseja iniciar a geração de prints?')) {
+        fetch('/api/gerar-prints', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({modo_invisivel: true})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                processRunning = true;
+                updateUI(true);
+                addLog('🚀 Geração de prints iniciada...');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        });
+    }
+}
+
+function enviarWhatsApp() {
+    if (processRunning) {
+        alert('Já existe um processo em execução!');
+        return;
+    }
+    
+    if (confirm('Deseja iniciar o envio para WhatsApp?')) {
+        fetch('/api/enviar-whatsapp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({modo_invisivel: true})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                processRunning = true;
+                updateUI(true);
+                addLog('📱 Envio para WhatsApp iniciado...');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        });
+    }
+}
+
+function executarCompleto() {
+    if (processRunning) {
+        alert('Já existe um processo em execução!');
+        return;
+    }
+    
+    if (confirm('Deseja executar o processo completo (Prints + WhatsApp)?')) {
+        fetch('/api/executar-completo', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({modo_invisivel: true})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                processRunning = true;
+                updateUI(true);
+                addLog('🎯 Processo completo iniciado...');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        });
+    }
+}
+
+function pararProcesso() {
+    if (confirm('Deseja realmente parar o processo atual?')) {
+        fetch('/api/parar-processo', {method: 'POST'})
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                processRunning = false;
+                updateUI(false);
+                addLog('⏹️ Processo interrompido pelo usuário');
+            }
+        });
+    }
+}
+
+function atualizarDados() {
+    location.reload();
+}
+
+function updateUI(running) {
+    const stopBtn = document.getElementById('stopBtn');
+    const systemStatus = document.getElementById('systemStatus');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const currentProcess = document.getElementById('currentProcess');
+    
+    if (running) {
+        stopBtn.style.display = 'block';
+        systemStatus.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Processando';
+        systemStatus.className = 'badge bg-warning';
+        currentProcess.textContent = 'Executando...';
+    } else {
+        stopBtn.style.display = 'none';
+        systemStatus.innerHTML = '<i class="fas fa-check me-1"></i>Online';
+        systemStatus.className = 'badge bg-success';
+        progressBar.style.width = '0%';
+        progressText.textContent = '0%';
+        currentProcess.textContent = 'Aguardando...';
+        
+        // Atualiza última atualização
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+    }
+}
+
+function addLog(message) {
+    const logContainer = document.getElementById('logContainer');
+    
+    // Se é a primeira mensagem, limpa o conteúdo inicial
+    if (logContainer.innerHTML.includes('Sistema pronto para uso')) {
+        logContainer.innerHTML = '';
+    }
+    
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = document.createElement('div');
+    logEntry.className = 'log-entry mb-1';
+    logEntry.innerHTML = `<span class="text-info">[${timestamp}]</span> ${message}`;
+    
+    logContainer.appendChild(logEntry);
+    logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+// Socket.IO events
+socket.on('progress_update', function(data) {
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const currentProcess = document.getElementById('currentProcess');
+    
+    progressBar.style.width = data.progress + '%';
+    progressText.textContent = data.progress + '%';
+    currentProcess.textContent = `${data.current_empresa} (${data.current}/${data.total})`;
+    
+    // Atualiza cor da barra baseada no progresso
+    progressBar.className = 'progress-bar';
+    if (data.progress < 30) {
+        progressBar.classList.add('bg-danger');
+    } else if (data.progress < 70) {
+        progressBar.classList.add('bg-warning');
+    } else {
+        progressBar.classList.add('bg-success');
+    }
+    
+    addLog(`📊 Processando: ${data.current_empresa} (${data.current}/${data.total})`);
+});
+
+socket.on('log_update', function(data) {
+    addLog(data.message);
+});
+
+socket.on('process_complete', function(data) {
+    processRunning = false;
+    updateUI(false);
+    addLog(`✅ Processo ${data.type} concluído! Sucessos: ${data.sucessos}, Falhas: ${data.falhas}`);
+    
+    // Atualiza estatísticas
+    setTimeout(() => {
+        atualizarDados();
+    }, 2000);
+});
+
+socket.on('process_error', function(data) {
+    processRunning = false;
+    updateUI(false);
+    addLog(`❌ Erro no processo ${data.type}: ${data.error}`);
+});
+
+socket.on('process_stopped', function(data) {
+    processRunning = false;
+    updateUI(false);
+    addLog(data.message);
+});
+</script>
+{% endblock %} 

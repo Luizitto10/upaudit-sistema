@@ -1,0 +1,198 @@
+[
+    {
+        "codigo": 27119,
+        "nome": "Matercaldas",
+        "grupo": "UP + MATERCALDAS",
+        "nome_arquivo": "27119 - Matercaldas.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26412,
+        "nome": "Guimaraes 85",
+        "grupo": "Postos",
+        "nome_arquivo": "26412 - Guimaraes 85.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26413,
+        "nome": "Guimaraes 63",
+        "grupo": "Postos",
+        "nome_arquivo": "26413 - Guimaraes 63.png",
+        "ativo": true
+    },
+    {
+        "codigo": 7520,
+        "nome": "Auto Posto Serra dos Pirineus",
+        "grupo": "Postos",
+        "nome_arquivo": "7520 - Auto Posto Serra dos Pirineus.png",
+        "ativo": true
+    },
+    {
+        "codigo": 27138,
+        "nome": "Mineira Materiais",
+        "grupo": "Materiais",
+        "nome_arquivo": "27138 - Mineira Materiais.png",
+        "ativo": true
+    },
+    {
+        "codigo": 24718,
+        "nome": "Guifrii 50",
+        "grupo": "Postos",
+        "nome_arquivo": "24718 - Guifrii 50.png",
+        "ativo": false
+    },
+    {
+        "codigo": 25992,
+        "nome": "MARQUES E COSTA 81",
+        "grupo": "Comércio",
+        "nome_arquivo": "25992 - MARQUES E COSTA 81.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26498,
+        "nome": "MARQUES E COSTA 62",
+        "grupo": "Comércio",
+        "nome_arquivo": "26498 - MARQUES E COSTA 62.png",
+        "ativo": true
+    },
+    {
+        "codigo": 16289,
+        "nome": "Equilibrio",
+        "grupo": "Farmácias",
+        "nome_arquivo": "16289 - Equilibrio Homeopatia.png",
+        "ativo": true
+    },
+    {
+        "codigo": 17606,
+        "nome": "MONTE CRISTO",
+        "grupo": "Comércio",
+        "nome_arquivo": "17606 - MONTE CRISTO.png",
+        "ativo": true
+    },
+    {
+        "codigo": 25991,
+        "nome": "Mariana Joias",
+        "grupo": "Joias",
+        "nome_arquivo": "25991 - Mariana Joias.png",
+        "ativo": true
+    },
+    {
+        "codigo": 15944,
+        "nome": "CANTINHO FRIO",
+        "grupo": "Alimentação",
+        "nome_arquivo": "15944 - CANTINHO FRIO.png",
+        "ativo": true
+    },
+    {
+        "codigo": 25715,
+        "nome": "Casa Dibs",
+        "grupo": "Casa e Construção",
+        "nome_arquivo": "25715 - Casa Dibs.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26520,
+        "nome": "Chao Nativo",
+        "grupo": "Alimentação",
+        "nome_arquivo": "26520 - Chao Nativo.png",
+        "ativo": true
+    },
+    {
+        "codigo": 23980,
+        "nome": "MERCEARIA E CONVENIENCIA DOS GAUCHOS",
+        "grupo": "Alimentação",
+        "nome_arquivo": "23980 - MERCEARIA E CONVENIENCIA DOS GAUCHOS.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26306,
+        "nome": "Madeimanas Madeireira 60",
+        "grupo": "Casa e Construção",
+        "nome_arquivo": "26306 - Madeimanas Madeireira 60.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26305,
+        "nome": "Madeimanas Madeireira 80",
+        "grupo": "Casa e Construção",
+        "nome_arquivo": "26305 - Madeimanas Madeireira 80.png",
+        "ativo": true
+    },
+    {
+        "codigo": 26304,
+        "nome": "Oliveira Casa",
+        "grupo": "Casa e Construção",
+        "nome_arquivo": "26304 - Oliveira Casa e Construção.png",
+        "ativo": true
+    },
+    {
+        "codigo": 25716,
+        "nome": "Posto Serra City",
+        "grupo": "Postos",
+        "nome_arquivo": "25716 - Posto Serra City.png",
+        "ativo": true
+    },
+    {
+        "codigo": 23025,
+        "nome": "Clinica San Francesco",
+        "grupo": "Saúde",
+        "nome_arquivo": "23025 - Clinica San Francesco.png",
+        "ativo": true
+    },
+    {
+        "codigo": 7517,
+        "nome": "Posto Aderup",
+        "grupo": "Postos",
+        "nome_arquivo": "7517 - Posto Aderup.png",
+        "ativo": true
+    },
+    {
+        "codigo": 16096,
+        "nome": "Supermercado Feliz",
+        "grupo": "Alimentação",
+        "nome_arquivo": "16096 - Supermercado Feliz.png",
+        "ativo": true
+    },
+    {
+        "codigo": 16660,
+        "nome": "Posto Primavera 000170",
+        "grupo": "Postos",
+        "nome_arquivo": "16660 - Posto Primavera 000170.png",
+        "ativo": true
+    },
+    {
+        "codigo": 16791,
+        "nome": "Posto Petro Bessa",
+        "grupo": "Postos",
+        "nome_arquivo": "16791 - Posto Petro Bessa.png",
+        "ativo": true
+    },
+    {
+        "codigo": 25488,
+        "nome": "Drogaria Legitima - 00",
+        "grupo": "Farmácias",
+        "nome_arquivo": "25488 - Drogaria Legitima - 00.png",
+        "ativo": true
+    },
+    {
+        "codigo": 25489,
+        "nome": "Drogaria Legitima - 83",
+        "grupo": "Farmácias",
+        "nome_arquivo": "25489 - Drogaria Legitima - 83.png",
+        "ativo": true
+    },
+    {
+        "codigo": 25490,
+        "nome": "Drogaria Legitima - 46",
+        "grupo": "Farmácias",
+        "nome_arquivo": "25490 - Drogaria Legitima - 46.png",
+        "ativo": true
+    },
+    {
+        "codigo": 252525,
+        "nome": "VENDAGAS",
+        "grupo": "UP + VENDERGAS",
+        "nome_arquivo": "252525 - VENDAGAS.png",
+        "ativo": true
+    }
+]

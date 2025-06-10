@@ -1,0 +1,33 @@
+{
+    "audit_system": {
+        "url": "https://audit.conciliadora.com.br/Login/Index",
+        "login": "joao.vitor@consultoriaexpansao.com.br",
+        "password": "Acesso#13",
+        "days_back": 3
+    },
+    "paths": {
+        "output_dir": "C:\\Users\\Luiz Marcelo\\Desktop\\PROJETO AUDIT\\prints",
+        "empresas_file": "./empresas.json",
+        "grupos_file": "./grupos.json",
+        "logs_dir": "./logs"
+    },
+    "chrome": {
+        "user_data_dir": "C:\\Users\\Luiz Marcelo\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+        "headless": true,
+        "window_size": "1920,1080",
+        "timeout": 60
+    },
+    "whatsapp": {
+        "url": "https://web.whatsapp.com/",
+        "message_template": "Olá, segue o quanto foi de vendas com as adquirentes no dia {data}, estamos enviando para que você confira com o que foi vendido em seu PDV"
+    },
+    "system": {
+        "max_retries": 5,
+        "retry_delay": 10,
+        "screenshot_quality": 95,
+        "backup_enabled": true,
+        "log_level": "INFO",
+        "connection_timeout": 120,
+        "page_load_timeout": 180
+    }
+} 

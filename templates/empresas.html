@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% block title %}Empresas - Sistema de Auditoria{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-building me-3"></i>Gerenciamento de Empresas</h1>
+    <button class="btn btn-success" onclick="abrirModalNovaEmpresa()">
+        <i class="fas fa-plus me-2"></i>Nova Empresa
+    </button>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fas fa-building me-2"></i>Lista de Empresas</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="empresasTable">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Grupo</th>
+                        <th>Arquivo</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="empresasTableBody">
+                    <!-- Dados carregados via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nova/Editar Empresa -->
+<div class="modal fade" id="empresaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="empresaModalTitle">
+                    <i class="fas fa-building me-2"></i>Nova Empresa
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="empresaForm">
+                    <div class="mb-3">
+                        <label for="empresaCodigo" class="form-label">Código *</label>
+                        <input type="number" class="form-control" id="empresaCodigo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="empresaNome" class="form-label">Nome *</label>
+                        <input type="text" class="form-control" id="empresaNome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="empresaGrupo" class="form-label">Grupo *</label>
+                        <input type="text" class="form-control" id="empresaGrupo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="empresaArquivo" class="form-label">Nome do Arquivo</label>
+                        <input type="text" class="form-control" id="empresaArquivo" readonly>
+                        <small class="text-muted">Gerado automaticamente: [código] - [nome].png</small>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="empresaAtivo" checked>
+                            <label class="form-check-label" for="empresaAtivo">
+                                Empresa Ativa
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarEmpresa()">
+                    <i class="fas fa-save me-2"></i>Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmação Exclusão -->
+<div class="modal fade" id="confirmarExclusaoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir a empresa <strong id="empresaExcluirNome"></strong>?</p>
+                <p class="text-muted">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="confirmarExclusaoEmpresa()">
+                    <i class="fas fa-trash me-2"></i>Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let empresas = [];
+let empresaEditandoIndex = -1;
+let empresaExcluindoCodigo = null;
+
+// Carrega empresas ao inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    carregarEmpresas();
+    
+    // Auto-gerar nome do arquivo
+    document.getElementById('empresaCodigo').addEventListener('input', atualizarNomeArquivo);
+    document.getElementById('empresaNome').addEventListener('input', atualizarNomeArquivo);
+});
+
+function carregarEmpresas() {
+    fetch('/api/empresas')
+        .then(response => response.json())
+        .then(data => {
+            empresas = data;
+            renderizarTabelaEmpresas();
+        })
+        .catch(error => {
+            console.error('Erro ao carregar empresas:', error);
+            alert('Erro ao carregar empresas');
+        });
+}
+
+function renderizarTabelaEmpresas() {
+    const tbody = document.getElementById('empresasTableBody');
+    tbody.innerHTML = '';
+    
+    empresas.forEach((empresa, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${empresa.codigo}</strong></td>
+            <td>${empresa.nome}</td>
+            <td><span class="badge bg-info">${empresa.grupo}</span></td>
+            <td><small class="text-muted">${empresa.nome_arquivo}</small></td>
+            <td>
+                ${empresa.ativo ? 
+                    '<span class="badge bg-success"><i class="fas fa-check me-1"></i>Ativa</span>' : 
+                    '<span class="badge bg-secondary"><i class="fas fa-pause me-1"></i>Inativa</span>'
+                }
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" onclick="editarEmpresa(${index})" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="excluirEmpresa(${empresa.codigo}, '${empresa.nome}')" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function abrirModalNovaEmpresa() {
+    empresaEditandoIndex = -1;
+    document.getElementById('empresaModalTitle').innerHTML = '<i class="fas fa-building me-2"></i>Nova Empresa';
+    document.getElementById('empresaForm').reset();
+    document.getElementById('empresaAtivo').checked = true;
+    document.getElementById('empresaArquivo').value = '';
+    new bootstrap.Modal(document.getElementById('empresaModal')).show();
+}
+
+function editarEmpresa(index) {
+    empresaEditandoIndex = index;
+    const empresa = empresas[index];
+    
+    document.getElementById('empresaModalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Editar Empresa';
+    document.getElementById('empresaCodigo').value = empresa.codigo;
+    document.getElementById('empresaNome').value = empresa.nome;
+    document.getElementById('empresaGrupo').value = empresa.grupo;
+    document.getElementById('empresaArquivo').value = empresa.nome_arquivo;
+    document.getElementById('empresaAtivo').checked = empresa.ativo;
+    
+    new bootstrap.Modal(document.getElementById('empresaModal')).show();
+}
+
+function atualizarNomeArquivo() {
+    const codigo = document.getElementById('empresaCodigo').value;
+    const nome = document.getElementById('empresaNome').value;
+    
+    if (codigo && nome) {
+        document.getElementById('empresaArquivo').value = `${codigo} - ${nome}.png`;
+    }
+}
+
+function salvarEmpresa() {
+    const codigo = parseInt(document.getElementById('empresaCodigo').value);
+    const nome = document.getElementById('empresaNome').value;
+    const grupo = document.getElementById('empresaGrupo').value;
+    const ativo = document.getElementById('empresaAtivo').checked;
+    
+    if (!codigo || !nome || !grupo) {
+        alert('Preencha todos os campos obrigatórios');
+        return;
+    }
+    
+    const empresaData = {
+        codigo: codigo,
+        nome: nome,
+        grupo: grupo,
+        nome_arquivo: `${codigo} - ${nome}.png`,
+        ativo: ativo
+    };
+    
+    if (empresaEditandoIndex >= 0) {
+        // Editando empresa existente
+        fetch(`/api/empresas/${codigo}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(empresaData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('empresaModal')).hide();
+                carregarEmpresas();
+                alert('Empresa atualizada com sucesso!');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao salvar empresa');
+        });
+    } else {
+        // Nova empresa
+        fetch('/api/empresas', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(empresaData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                bootstrap.Modal.getInstance(document.getElementById('empresaModal')).hide();
+                carregarEmpresas();
+                alert('Empresa criada com sucesso!');
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao criar empresa');
+        });
+    }
+}
+
+function excluirEmpresa(codigo, nome) {
+    empresaExcluindoCodigo = codigo;
+    document.getElementById('empresaExcluirNome').textContent = nome;
+    new bootstrap.Modal(document.getElementById('confirmarExclusaoModal')).show();
+}
+
+function confirmarExclusaoEmpresa() {
+    fetch(`/api/empresas/${empresaExcluindoCodigo}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('confirmarExclusaoModal')).hide();
+            carregarEmpresas();
+            alert('Empresa excluída com sucesso!');
+        } else {
+            alert('Erro: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao excluir empresa');
+    });
+}
+</script>
+{% endblock %} 
